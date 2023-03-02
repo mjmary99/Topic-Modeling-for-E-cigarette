@@ -1,0 +1,55 @@
+DROP TABLE IF EXISTS metatable;
+CREATE TABLE metatable (
+  id VARCHAR(50),
+  date VARCHAR(50),
+  day INT,
+  PRIMARY KEY (id)
+);
+
+
+DROP TABLE IF EXISTS portion_ts;
+CREATE TABLE portion_ts (
+  id VARCHAR(50),
+  state VARCHAR(3),
+  date VARCHAR(50),
+  transcript_portion TEXT,
+  PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS full_ts;
+CREATE TABLE full_ts (
+  id VARCHAR(50),
+  state VARCHAR(3),
+  date VARCHAR(50),
+  transcript_portion TEXT,
+  PRIMARY KEY (id)
+);
+
+
+copy metatable(id, date, day)
+FROM '/Users/heqian/Public/stats170b/metaTable_new.csv'
+CSV HEADER;
+
+copy portion_ts(id, state, date, transcript_portion)
+FROM '/Users/heqian/Public/stats170b/id_state_date_portion_final.csv'
+CSV HEADER;
+
+copy full_ts(id, state, date, transcript_portion)
+FROM '/Users/heqian/Public/stats170b/id_state_date_full_final.csv'
+CSV HEADER;
+
+SELECT * FROM full_ts;
+
+
+
+select mt.id, mt.date, mt.day, pt.state, pt.transcript_portion
+from portion_ts pt
+JOIN metatable mt on mt.id = pt.id;
+
+
+select mt.id, mt.date, mt.day, ft.state, ft.transcript_portion
+from full_ts ft
+JOIN metatable mt on mt.id = ft.id
+
+
+
